@@ -12,6 +12,9 @@
 namespace FoskyM\WechatOfficial;
 
 use Flarum\Extend;
+use Flarum\User\User;
+use Flarum\Api\Serializer\UserSerializer;
+use FoskyM\WechatOfficial\Models\WechatLink;
 
 return [
     (new Extend\Frontend('forum'))
@@ -24,4 +27,30 @@ return [
 
     (new Extend\Notification())
         ->driver('wechat_official', WechatPusherNotificationDriver::class),
+
+    (new Extend\Settings())
+        ->serializeToForum('foskym-wechat-official.app_id', 'foskym-wechat-official.app_id')
+        ->serializeToForum('foskym-wechat-official.enable_push', 'foskym-wechat-official.enable_push'),
+
+    (new Extend\ApiSerializer(UserSerializer::class))
+        ->attributes(function($serializer, $user, $attributes) {
+            try {
+                $link = WechatLink::where('user_id', $user->id)->firstOrFail();
+                $linked = true;
+            } catch (\Exception $e) {
+                $linked = false;
+            }
+            
+            $attributes['WechatAuth'] = [
+                'isLinked' => $linked,
+            ];
+
+            return $attributes;
+        }),
+
+    (new Extend\Model(User::class))
+        ->hasOne('wechat_link', WechatLink::class, 'user_id'),
+
+    (new Extend\Routes('forum'))
+        ->get('/wechat-official/callback', 'foskym-wechat-official.callback', Controllers\WechatLoginController::class),
 ];

@@ -2,6 +2,17 @@ foskym-wechat-official:
   # For more details on the format
   # Checkout https://docs.flarum.org/extend/i18n/#appendix-a-standard-key-format
   admin:
-    my_cool_key: My Cool Key
+    settings:
+      app_id_label: App ID
+      app_secret_label: App Secret
+      callback_url_label: Callback URL
+      enable_push_label: Enable Push Notification
+      template_message_id_label: Template Message ID
 
   forum:
+    settings:
+      push_notification_label: Wechat
+      bind_wechat: Bind Wechat Account
+      wechat_linked: Wechat Account Linked
+      wechat_unlink: Unlink Wechat Account
+      wechat_unlink_success: Wechat Account Unlinked

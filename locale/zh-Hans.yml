@@ -1,0 +1,13 @@
+foskym-wechat-official:
+  admin:
+    settings:
+      app_id_label: App ID
+      app_secret_label: App Secret
+      callback_url_label: 回调地址
+      enable_push_label: 启用推送通知
+
+  forum:
+    settings:
+      push_notification_label: 微信
+      bind_wechat: 绑定微信账号
+      wechat_linked: 微信账号已绑定
