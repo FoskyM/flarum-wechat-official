@@ -11,20 +11,26 @@
 
 namespace FoskyM\WechatOfficial;
 
+use Flarum\User\User;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\Driver\NotificationDriverInterface;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Queue\Queue;
 
 class WechatPusherNotificationDriver implements NotificationDriverInterface
 {
-    /**
-     * @var Queue
-     */
     protected $queue;
+    protected $settings;
+    protected $notifications;
 
-    public function __construct(Queue $queue)
-    {
+    public function __construct(
+        Queue $queue,
+        SettingsRepositoryInterface $settings,
+        NotificationBuilder $notifications
+    ) {
         $this->queue = $queue;
+        $this->settings = $settings;
+        $this->notifications = $notifications;
     }
 
     /**
@@ -33,7 +39,7 @@ class WechatPusherNotificationDriver implements NotificationDriverInterface
     public function send(BlueprintInterface $blueprint, array $users): void
     {
         if (count($users)) {
-            $this->queue->push(new SendWechatNotificationsJob($blueprint, $users));
+            $this->queue->push(new SendWechatNotificationsJob($blueprint, $users, $this->settings));
         }
     }
 
@@ -42,7 +48,12 @@ class WechatPusherNotificationDriver implements NotificationDriverInterface
      */
     public function registerType(string $blueprintClass, array $driversEnabledByDefault): void
     {
-        // This method is generally used to register a user preference for this notification.
-        // In the case of pusher, there's no need for this.
+        if ($this->notifications->supports($blueprintClass)) {
+            User::registerPreference(
+                User::getNotificationPreferenceKey($blueprintClass::getType(), 'push'),
+                'boolval',
+                in_array('email', $driversEnabledByDefault)
+            );
+        }
     }
 }
