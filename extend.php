@@ -53,4 +53,7 @@ return [
 
     (new Extend\Routes('forum'))
         ->get('/wechat-official/callback', 'foskym-wechat-official.callback', Controllers\WechatLoginController::class),
+    
+    (new Extend\Routes('api'))
+        ->post('/wechat-official/unlink', 'foskym-wechat-official.unlink', Controllers\WechatUnlinkController::class),
 ];
