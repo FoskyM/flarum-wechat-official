@@ -2,12 +2,14 @@
     "name": "foskym/flarum-wechat-official",
     "description": "Flarum 的微信公众号拓展。",
     "keywords": [
-        "flarum"
+        "flarum",
+        "wechat",
+        "official"
     ],
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
-        "flarum/core": "^1.2.0"
+        "flarum/core": "^1.8.0"
     },
     "authors": [
         {
@@ -26,9 +28,9 @@
             "title": "Wechat Official",
             "category": "",
             "icon": {
-                "name": "",
-                "color": "",
-                "backgroundColor": ""
+                "name": "fab fa-weixin",
+                "color": "#4d4d4d",
+                "backgroundColor": "#07C160"
             }
         },
         "flarum-cli": {

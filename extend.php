@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FoskyM\\WechatOfficial;
+namespace FoskyM\WechatOfficial;
 
 use Flarum\Extend;
 
@@ -21,4 +21,7 @@ return [
         ->js(__DIR__.'/js/dist/admin.js')
         ->css(__DIR__.'/less/admin.less'),
     new Extend\Locales(__DIR__.'/locale'),
+
+    (new Extend\Notification())
+        ->driver('wechat_official', WechatPusherNotificationDriver::class),
 ];
