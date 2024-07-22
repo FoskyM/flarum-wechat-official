@@ -11,5 +11,5 @@ foskym-wechat-official:
       push_notification_label: 微信
       bind_wechat: 绑定微信账号
       wechat_linked: 微信账号已绑定
-      wechat_unlink: 解绑微信账号
+      wechat_unlink: 解绑微信
       wechat_unlink_success: 微信账号已解绑

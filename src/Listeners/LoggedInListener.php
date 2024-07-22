@@ -33,18 +33,18 @@ class LoggedInListener
     {
         $user = $event->user;
 
-        $session = $this->request->getAttribute('session');
-        if ($session->get('wechat_open_id')) {
-            $wechatLink = new WechatLink;
-            $wechatLink->user_id = $user->id;
-            $wechatLink->wechat_open_id = $session->get('wechat_open_id');
-            $wechatLink->wechat_original_data = $session->get('wechat_original_data');
-            $wechatLink->save();
+        // $session = $this->request->getAttribute('session');
+        // if ($session->get('wechat_open_id')) {
+        //     $wechatLink = new WechatLink;
+        //     $wechatLink->user_id = $user->id;
+        //     $wechatLink->wechat_open_id = $session->get('wechat_open_id');
+        //     $wechatLink->wechat_original_data = $session->get('wechat_original_data');
+        //     $wechatLink->save();
 
-            $this->events->dispatch(new WechatLinked($user, $wechatLink));
+        //     $this->events->dispatch(new WechatLinked($user, $wechatLink));
 
-            $session->remove('wechat_open_id');
-            $session->remove('wechat_original_data');
-        }
+        //     $session->remove('wechat_open_id');
+        //     $session->remove('wechat_original_data');
+        // }
     }
 }
