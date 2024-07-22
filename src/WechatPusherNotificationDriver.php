@@ -16,21 +16,26 @@ use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\Driver\NotificationDriverInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Queue\Queue;
+use Illuminate\Contracts\Cache\Store as Cache;
+use FoskyM\WechatOfficial\Job\SendWechatNotificationsJob;
 
 class WechatPusherNotificationDriver implements NotificationDriverInterface
 {
     protected $queue;
     protected $settings;
     protected $notifications;
+    protected $cache;
 
     public function __construct(
         Queue $queue,
         SettingsRepositoryInterface $settings,
-        NotificationBuilder $notifications
+        NotificationBuilder $notifications,
+        Cache $cache
     ) {
         $this->queue = $queue;
         $this->settings = $settings;
         $this->notifications = $notifications;
+        $this->cache = $cache;
     }
 
     /**
@@ -38,8 +43,13 @@ class WechatPusherNotificationDriver implements NotificationDriverInterface
      */
     public function send(BlueprintInterface $blueprint, array $users): void
     {
+        $settings = [
+            'app_id' => $this->settings->get('foskym-wechat-official.app_id'),
+            'app_secret' => $this->settings->get('foskym-wechat-official.app_secret'),
+            'template_message_id' => $this->settings->get('foskym-wechat-official.template_message_id')
+        ];
         if (count($users)) {
-            $this->queue->push(new SendWechatNotificationsJob($blueprint, $users, $this->settings));
+            $this->queue->push(new SendWechatNotificationsJob($blueprint, $users));
         }
     }
 

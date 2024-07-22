@@ -1,81 +1,91 @@
 <?php
 
 /*
- * This file is part of foskym/flarum-wechat-official.
+ * This file is part of askvortsov/flarum-pwa
  *
- * Copyright (c) 2024 FoskyM.
+ *  Copyright (c) 2021 Alexander Skvortsov.
  *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
+ *  For detailed copyright and license information, please view the
+ *  LICENSE file that was distributed with this source code.
  */
-
 
 namespace FoskyM\WechatOfficial;
 
-use Flarum\Notification\Blueprint\BlueprintInterface;
-use Flarum\Queue\AbstractJob;
-use Flarum\User\User;
-use FoskyM\WechatOfficial\Models\WechatLink;
-use Illuminate\Support\Facades\Cache;
-use Flarum\Settings\SettingsRepositoryInterface;
+use Base64Url\Base64Url;
 use Carbon\Carbon;
+use ErrorException;
+use Exception;
+use Flarum\Http\UrlGenerator;
+use Flarum\Notification\Blueprint\BlueprintInterface;
+use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\User;
+use Psr\Log\LoggerInterface;
+use FoskyM\WechatOfficial\Models\WechatLink;
+use Illuminate\Contracts\Cache\Store as Cache;
 
-class SendWechatNotificationsJob extends AbstractJob
+class WechatPusher
 {
-    /**
-     * @var BlueprintInterface
-     */
-    private $blueprint;
+    protected LoggerInterface $logger;
 
-    /**
-     * @var User[]
-     */
-    private $recipients;
+    protected SettingsRepositoryInterface $settings;
 
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    private $settings;
+    protected UrlGenerator $url;
 
-    public function __construct(BlueprintInterface $blueprint, array $recipients, $settings)
-    {
-        $this->blueprint = $blueprint;
-        $this->recipients = $recipients;
+    protected NotificationBuilder $notifications;
+
+    protected Cache $cache;
+
+    public function __construct(
+        LoggerInterface $logger,
+        SettingsRepositoryInterface $settings,
+        UrlGenerator $url,
+        NotificationBuilder $notifications,
+        Cache $cache
+    ) {
+        $this->logger = $logger;
         $this->settings = $settings;
+        $this->url = $url;
+        $this->notifications = $notifications;
+        $this->cache = $cache;
     }
 
-    public function handle()
+    /**
+     * @throws ErrorException
+     * @throws Exception
+     */
+    public function notify(BlueprintInterface $blueprint, array $recipients = []): void
     {
-        if (Cache::has('wechat_official.access_token')) {
-            $access_token = Cache::get('wechat_official.access_token');
-        } else {
+        $access_token = $this->cache->get('wechat_official.access_token');
+        if (is_null($access_token)) {
             $appid = $this->settings->get('foskym-wechat-official.app_id');
             $secret = $this->settings->get('foskym-wechat-official.app_secret');
             $api = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' . $appid . '&secret=' . $secret;
             $response = json_decode(file_get_contents($api));
             $access_token = $response->access_token;
-            $expiresAt = Carbon::now()->addMinutes(120);
 
-            Cache::put('wechat_official.access_token', $access_token, $expiresAt);
+            $this->cache->put('wechat_official.access_token', $access_token, $response->expires_in);
         }
 
-        foreach ($this->recipients as $user) {
-            if ($user->shouldAlert($this->blueprint::getType())) {
+        $template_id = $this->settings->get('foskym-wechat-official.template_message_id');
+
+        foreach ($recipients as $user) {
+            if ($user->shouldAlert($blueprint::getType())) {
                 // Send the notification to the user
                 try {
                     $wechat_link = WechatLink::where('user_id', $user->id)->firstOrFail();
                     $wechat_open_id = $wechat_link->wechat_open_id;
+                    $message = $this->notifications->build($blueprint);
                     $api = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
                     $data = [
                         'touser' => $wechat_open_id,
-                        'template_id' => $this->settings->get('foskym-wechat-official.template_message_id'),
-                        'url' => $this->blueprint->getSubject()->getNotificationUrl(),
+                        'template_id' => $template_id,
+                        'url' => $message->url(),
                         'data' => [
                             'thing01' => [
-                                'value' => $this->blueprint->getSubject()->getTitle(),
+                                'value' => $message->title(),
                             ],
                             'thing02' => [
-                                'value' => $this->blueprint->getSubject()->getContent(),
+                                'value' => $message->body(),
                             ],
                             'time01' => [
                                 'value' => Carbon::now()->toDateTimeString(),
@@ -95,7 +105,7 @@ class SendWechatNotificationsJob extends AbstractJob
                     $result = curl_exec($ch);
                     curl_close($ch);
                     
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     continue;
                 }
             }
