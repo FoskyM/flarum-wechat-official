@@ -16,14 +16,14 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
     .registerSetting({
       setting: 'foskym-wechat-official.callback_url',
       label: app.translator.trans('foskym-wechat-official.admin.settings.callback_url_label'),
-      help: 'http://HOST:PORT' + '/wechat-official/callback',
+      help: app.translator.trans('foskym-wechat-official.admin.settings.callback_url_description'),
       type: 'hidden'
     })
     .registerSetting({
       setting: 'foskym-wechat-official.template_message_id',
       label: app.translator.trans('foskym-wechat-official.admin.settings.template_message_id_label'),
       type: 'text',
-      help: '模板格式【标题: {{thing01.DATA}} 内容: {{thing02.DATA}} 时间: {{time01.DATA}}	】'
+      help: app.translator.trans('foskym-wechat-official.admin.settings.template_message_id_description') + ' 【标题: {{thing01.DATA}} 内容: {{thing02.DATA}} 时间: {{time01.DATA}}	】'
     })
     .registerSetting({
       setting: 'foskym-wechat-official.enable_push',

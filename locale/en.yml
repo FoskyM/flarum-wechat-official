@@ -8,6 +8,8 @@ foskym-wechat-official:
       callback_url_label: Callback URL
       enable_push_label: Enable Push Notification
       template_message_id_label: Template Message ID
+      template_message_id_description: 'Template format'
+      callback_url_description: 'Please fill in the domain name in the WeChat Official Account Platform [Web Authorization] configuration'
 
   forum:
     settings:

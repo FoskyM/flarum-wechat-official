@@ -5,6 +5,9 @@ foskym-wechat-official:
       app_secret_label: App Secret
       callback_url_label: 回调地址
       enable_push_label: 启用推送通知
+      template_message_id_label: 模板消息 ID
+      template_message_id_description: '模板格式'
+      callback_url_description: '请将网站域名填入微信公众平台【网页授权】配置中'
 
   forum:
     settings:
