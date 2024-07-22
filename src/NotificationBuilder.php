@@ -23,9 +23,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NotificationBuilder
 {
-    protected TranslatorInterface $translator;
+    protected $translator;
 
-    protected UrlGenerator $url;
+    protected $url;
 
     const SUPPORTED_NON_EMAIL_BLUEPRINTS = [
         "Flarum\Likes\Notification\PostLikedBlueprint",
