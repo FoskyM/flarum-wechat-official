@@ -32,6 +32,7 @@ use Flarum\User\Exception\NotAuthenticatedException;
 use Flarum\User\UserRepository;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use FoskyM\WechatOfficial\Event\WechatUnlinked;
 
 class WechatUnlinkController implements RequestHandlerInterface
 {
@@ -58,6 +59,9 @@ class WechatUnlinkController implements RequestHandlerInterface
 
         $wechat_link = WechatLink::where('user_id', $actor->id)->first();
         if ($wechat_link) {
+            $this->events->dispatch(
+                new WechatUnlinked($actor, $wechat_link)
+            );
             $wechat_link->delete();
         }
 

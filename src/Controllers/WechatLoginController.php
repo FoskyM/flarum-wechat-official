@@ -32,6 +32,7 @@ use Flarum\User\Exception\NotAuthenticatedException;
 use Flarum\User\UserRepository;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use FoskyM\WechatOfficial\Event\WechatLinked;
 
 class WechatLoginController implements RequestHandlerInterface
 {
@@ -98,6 +99,10 @@ class WechatLoginController implements RequestHandlerInterface
             $wechat_link->wechat_open_id = $data['openid'];
             $wechat_link->wechat_original_data = json_encode($data);
             $wechat_link->save();
+
+            $this->events->dispatch(
+                new WechatLinked($actor, $wechat_link)
+            );
 
             // $user->save();
             return new HtmlResponse('<script>window.alert("绑定成功！");window.location.href="/settings"</script>');
