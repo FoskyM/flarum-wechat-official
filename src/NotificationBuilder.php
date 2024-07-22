@@ -20,6 +20,7 @@ use Flarum\Post\Post;
 use Flarum\User\User;
 use ReflectionClass;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class NotificationBuilder
 {
@@ -85,7 +86,12 @@ class NotificationBuilder
             case Post::class:
                 /** @var Post $subject */
                 if ($subject instanceof CommentPost) {
-                    $content = $subject->formatContent();
+                    if ($blueprint->getType() === 'postMentioned') {
+                        $reply = $subject->mentionedBy()->orderByDesc('created_at')->first();
+                        $content = $reply->formatContent();
+                    } else {
+                        $content = $subject->formatContent();
+                    }
                 }
                 break;
         }
