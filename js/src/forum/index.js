@@ -11,6 +11,7 @@ import icon from 'flarum/common/helpers/icon';
 import User from 'flarum/common/models/User';
 import Model from 'flarum/common/Model';
 import LogInModal from 'flarum/forum/components/LogInModal';
+import IndexPage from 'flarum/forum/components/IndexPage';
 
 function getOAuthURL() {
   const appid = app.forum.attribute('foskym-wechat-official.app_id');
@@ -91,11 +92,24 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
   });
 
   extend(LogInModal.prototype, 'oncreate', function () {
-    if (isInWechat() && !isCallback()) {
+    if (isInWechat() && !isCallback() && app.forum.attribute('foskym-wechat-official.enable_login_replace')) {
       let url = getOAuthURL();
       window.location.href = url;
     } else {
       $('.LogInModal').show();
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {   
+    if (isInWechat() && isCallback()) {
+      if (!app.session.user) {
+        setTimeout(() => {
+          app.modal.show(LogInModal);
+          $('.LogInModal').show();
+        }, 200);
+      } else {
+        m.route.set('/settings');
+      }
     }
   });
 });

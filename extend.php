@@ -30,7 +30,8 @@ return [
 
     (new Extend\Settings())
         ->serializeToForum('foskym-wechat-official.app_id', 'foskym-wechat-official.app_id')
-        ->serializeToForum('foskym-wechat-official.enable_push', 'foskym-wechat-official.enable_push'),
+        ->serializeToForum('foskym-wechat-official.enable_push', 'foskym-wechat-official.enable_push', 'boolval')
+        ->serializeToForum('foskym-wechat-official.enable_login_replace', 'foskym-wechat-official.enable_login_replace', 'boolval'),
 
     (new Extend\ApiSerializer(UserSerializer::class))
         ->attributes(function($serializer, $user, $attributes) {
