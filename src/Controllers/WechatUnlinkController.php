@@ -57,6 +57,12 @@ class WechatUnlinkController implements RequestHandlerInterface
         $actor = RequestUtil::getActor($request);
         $actor->assertRegistered();
 
+        if ($this->settings->get('foskym-wechat-official.enable_unbind') !== '1') {
+            return new JsonResponse([
+                'msg' => 'error'
+            ]);
+        }
+
         $wechat_link = WechatLink::where('user_id', $actor->id)->first();
         if ($wechat_link) {
             $this->events->dispatch(

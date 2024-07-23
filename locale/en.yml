@@ -9,6 +9,7 @@ foskym-wechat-official:
       enable_push_label: Enable Push Notification
       enable_login_replace_label: Replace Login To WeChat's In WeChat
       enable_login_replace_description: 'Replace the login button with WeChat login, if the WeChat account is not bound, it will automatically jump to the native login page'
+      enable_unbind_label: Enable Unbind WeChat Account
       template_message_id_label: Template Message ID
       template_message_id_description: 'Template format'
       callback_url_description: 'Please fill in the domain name in the WeChat Official Account Platform [Web Authorization] configuration'

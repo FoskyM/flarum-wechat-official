@@ -7,6 +7,7 @@ foskym-wechat-official:
       enable_push_label: 启用推送通知
       enable_login_replace_label: 在微信中使用微信登录替换
       enable_login_replace_description: '将登录按钮替换为微信登录，如果微信账号未绑定，则会自动跳转到原生登录页面'
+      enable_unbind_label: 启用解绑
       template_message_id_label: 模板消息 ID
       template_message_id_description: '模板格式'
       callback_url_description: '请将网站域名填入微信公众平台【网页授权】配置中'

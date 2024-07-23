@@ -52,7 +52,7 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
     let url = getOAuthURL();
     items.add(
       'wechat',
-      this.user.WechatAuth().isLinked ? (
+      this.user.WechatAuth().isLinked && app.forum.attribute('foskym-wechat-official.enable_unbind') ? (
         <Button
           icon="fab fa-weixin"
           className="Button Button--Wechat"
@@ -64,10 +64,12 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
               })
               .then(() => {
                 this.user.WechatAuth().isLinked = false;
-                app.alerts.show(Alert, {
-                  type: 'success',
-                  children: app.translator.trans('foskym-wechat-official.forum.settings.wechat_unlink_success'),
-                });
+                app.alerts.show(
+                  {
+                    type: 'success',
+                  },
+                  app.translator.trans('foskym-wechat-official.forum.settings.wechat_unlink_success')
+                );
                 m.redraw();
               });
           }}
@@ -75,13 +77,7 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
           {app.translator.trans('foskym-wechat-official.forum.settings.wechat_unlink')}
         </Button>
       ) : (
-        <LinkButton
-          icon="fab fa-weixin"
-          className="Button Button--Wechat"
-          // disabled={}
-          href={url}
-          external={true}
-        >
+        <LinkButton icon="fab fa-weixin" className="Button Button--Wechat" disabled={this.user.WechatAuth().isLinked} href={url} external={true}>
           {this.user.WechatAuth().isLinked
             ? app.translator.trans('foskym-wechat-official.forum.settings.wechat_linked')
             : app.translator.trans('foskym-wechat-official.forum.settings.bind_wechat')}
@@ -100,7 +96,7 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
     }
   });
 
-  document.addEventListener('DOMContentLoaded', function () {   
+  document.addEventListener('DOMContentLoaded', function () {
     if (isInWechat() && isCallback()) {
       if (!app.session.user) {
         setTimeout(() => {

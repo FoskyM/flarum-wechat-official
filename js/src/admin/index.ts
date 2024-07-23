@@ -36,4 +36,9 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
       help: app.translator.trans('foskym-wechat-official.admin.settings.enable_login_replace_description'),
       type: 'boolean'
     })
+    .registerSetting({
+      setting: 'foskym-wechat-official.enable_unbind',
+      label: app.translator.trans('foskym-wechat-official.admin.settings.enable_unbind_label'),
+      type: 'boolean'
+    })
 });
