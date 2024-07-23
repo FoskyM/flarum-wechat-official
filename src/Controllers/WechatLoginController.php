@@ -94,15 +94,19 @@ class WechatLoginController implements RequestHandlerInterface
             }
         } else {
             // $user = $actor;
-            $wechat_link = new WechatLink();
-            $wechat_link->user_id = $actor->id;
-            $wechat_link->wechat_open_id = $data['openid'];
-            $wechat_link->wechat_original_data = $data;
-            $wechat_link->save();
+            try {
+                $wechat_link = WechatLink::where('user_id', $actor->id)->firstOrFail();
+            } catch (\Exception $e) {
+                $wechat_link = new WechatLink();
+                $wechat_link->user_id = $actor->id;
+                $wechat_link->wechat_open_id = $data['openid'];
+                $wechat_link->wechat_original_data = $data;
+                $wechat_link->save();
 
-            $this->events->dispatch(
-                new WechatLinked($actor, $wechat_link)
-            );
+                $this->events->dispatch(
+                    new WechatLinked($actor, $wechat_link)
+                );
+            }
 
             // $user->save();
             return new HtmlResponse('<script>window.alert("绑定成功！");window.location.href="/settings"</script>');
