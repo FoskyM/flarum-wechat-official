@@ -19,7 +19,11 @@ class WechatLink extends AbstractModel
 {
     protected $table = 'user_wechat_id';
 
-    protected $fillable = ['user_id', 'wechat_open_id', 'wechat_original_data'];
+    protected $fillable = ['user_id', 'wechat_open_id', 'wechat_original_data', 'created_at', 'updated_at'];
+
+    protected $casts = [
+        'wechat_original_data' => 'array',
+    ];
 
     public function user()
     {

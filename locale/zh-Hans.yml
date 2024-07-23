@@ -19,3 +19,16 @@ foskym-wechat-official:
       wechat_linked: 微信账号已绑定
       wechat_unlink: 解绑微信
       wechat_unlink_success: 微信账号已解绑
+      notify_wechat_linked_label: 绑定微信账号时通知
+
+    notifications:
+      wechat_linked: '您的微信账号已绑定到您的论坛账号。'
+      wechat_unlinked: '您的微信账号已从您的论坛账号解绑。'
+
+  email:
+    wechat_linked:
+      subject: 微信账号已绑定
+      body: '您的微信账号已绑定到您的论坛账号。'
+    wechat_unlinked:
+      subject: 微信账号已解绑
+      body: '您的微信账号已从您的论坛账号解绑。'

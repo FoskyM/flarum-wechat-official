@@ -21,3 +21,16 @@ foskym-wechat-official:
       wechat_linked: Wechat Account Linked
       wechat_unlink: Unlink Wechat Account
       wechat_unlink_success: Wechat Account Unlinked
+      notify_wechat_linked_label: Notify When Wechat Account Linked
+
+    notifications:
+      wechat_linked: 'Your Wechat account has been linked to your forum account.'
+      wechat_unlinked: 'Your Wechat account has been unlinked from your forum account.'
+
+  email:
+    wechat_linked:
+      subject: Wechat Account Linked
+      body: 'Your Wechat account has been linked to your forum account.'
+    wechat_unlinked:
+      subject: Wechat Account Unlinked
+      body: 'Your Wechat account has been unlinked from your forum account.'

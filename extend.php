@@ -12,9 +12,13 @@
 namespace FoskyM\WechatOfficial;
 
 use Flarum\Extend;
+use FoskyM\WechatOfficial\Notification\WechatLinkedBlueprint;
 use Flarum\User\User;
 use Flarum\Api\Serializer\UserSerializer;
 use FoskyM\WechatOfficial\Models\WechatLink;
+use FoskyM\WechatOfficial\Serializers\WechatLinkSerializer;
+use FoskyM\WechatOfficial\Event\WechatLinked;
+use FoskyM\WechatOfficial\Event\WechatUnlinked;
 
 return [
     (new Extend\Frontend('forum'))
@@ -25,8 +29,16 @@ return [
         ->css(__DIR__.'/less/admin.less'),
     new Extend\Locales(__DIR__.'/locale'),
 
+    (new Extend\View)
+        ->namespace('foskym-wechat-official', __DIR__.'/views'),
+
     (new Extend\Notification())
-        ->driver('wechat_official', WechatPusherNotificationDriver::class),
+        ->driver('wechat_official', WechatPusherNotificationDriver::class)
+        ->type(WechatLinkedBlueprint::class, WechatLinkSerializer::class, ['alert', 'email', 'wechat_official']),
+
+    (new Extend\Event())
+        ->listen(WechatLinked::class, Listeners\SendNotificationWhenWechatLinked::class)
+        ->listen(WechatUnlinked::class, Listeners\SendNotificationWhenWechatUnlinked::class),
 
     (new Extend\Settings())
         ->serializeToForum('foskym-wechat-official.app_id', 'foskym-wechat-official.app_id')

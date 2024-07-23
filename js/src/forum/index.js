@@ -11,7 +11,7 @@ import icon from 'flarum/common/helpers/icon';
 import User from 'flarum/common/models/User';
 import Model from 'flarum/common/Model';
 import LogInModal from 'flarum/forum/components/LogInModal';
-import IndexPage from 'flarum/forum/components/IndexPage';
+import WechatLinkedNotification from './components/WechatLinkedNotification';
 
 function getOAuthURL() {
   const appid = app.forum.attribute('foskym-wechat-official.app_id');
@@ -35,6 +35,15 @@ function isCallback() {
 
 app.initializers.add('foskym/flarum-wechat-official', () => {
   User.prototype.WechatAuth = Model.attribute('WechatAuth');
+  app.notificationComponents.wechatLinked = WechatLinkedNotification;
+
+  extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+    items.add('wechatLinked', {
+      name: 'wechatLinked',
+      icon: 'fab fa-weixin',
+      label: app.translator.trans('foskym-wechat-official.forum.settings.notify_wechat_linked_label')
+    });
+  });
 
   extend(NotificationGrid.prototype, 'notificationMethods', function (items) {
     if (!app.forum.attribute('foskym-wechat-official.enable_push')) {

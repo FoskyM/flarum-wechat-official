@@ -89,7 +89,7 @@ class WechatLoginController implements RequestHandlerInterface
             } else {
                 $session = $request->getAttribute('session');
                 $session->put('wechat_open_id', $data['openid']);
-                $session->put('wechat_original_data', json_encode($data));
+                $session->put('wechat_original_data', $data);
                 return new HtmlResponse('<script>window.alert("该微信未绑定账号，请先登录账号后再进行绑定。");window.location.href="/?wechat_redirect=true"</script>');
             }
         } else {
@@ -97,7 +97,7 @@ class WechatLoginController implements RequestHandlerInterface
             $wechat_link = new WechatLink();
             $wechat_link->user_id = $actor->id;
             $wechat_link->wechat_open_id = $data['openid'];
-            $wechat_link->wechat_original_data = json_encode($data);
+            $wechat_link->wechat_original_data = $data;
             $wechat_link->save();
 
             $this->events->dispatch(
