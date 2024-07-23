@@ -43,12 +43,7 @@ class WechatPusherNotificationDriver implements NotificationDriverInterface
      */
     public function send(BlueprintInterface $blueprint, array $users): void
     {
-        $settings = [
-            'app_id' => $this->settings->get('foskym-wechat-official.app_id'),
-            'app_secret' => $this->settings->get('foskym-wechat-official.app_secret'),
-            'template_message_id' => $this->settings->get('foskym-wechat-official.template_message_id')
-        ];
-        if (count($users)) {
+        if (count($users) && $this->settings->get('foskym-wechat-official.enable_push')) {
             $this->queue->push(new SendWechatNotificationsJob($blueprint, $users));
         }
     }
