@@ -41,6 +41,7 @@ return [
         ->listen(WechatUnlinked::class, Listeners\SendNotificationWhenWechatUnlinked::class),
 
     (new Extend\Settings())
+        ->default('foskym-wechat-official.develop_mode', false)
         ->serializeToForum('foskym-wechat-official.app_id', 'foskym-wechat-official.app_id')
         ->serializeToForum('foskym-wechat-official.enable_push', 'foskym-wechat-official.enable_push', 'boolval')
         ->serializeToForum('foskym-wechat-official.enable_login_replace', 'foskym-wechat-official.enable_login_replace', 'boolval')

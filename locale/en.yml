@@ -3,6 +3,8 @@ foskym-wechat-official:
   # Checkout https://docs.flarum.org/extend/i18n/#appendix-a-standard-key-format
   admin:
     settings:
+      develop_mode_label: Develop Mode
+      develop_mode_description: 'Enable this option to use the WeChat sandbox environment'
       app_id_label: App ID
       app_secret_label: App Secret
       callback_url_label: Callback URL

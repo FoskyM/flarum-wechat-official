@@ -1,6 +1,8 @@
 foskym-wechat-official:
   admin:
     settings:
+      develop_mode_label: 开发模式
+      develop_mode_description: '启用此选项以使用微信沙箱环境'
       app_id_label: App ID
       app_secret_label: App Secret
       callback_url_label: 回调地址
