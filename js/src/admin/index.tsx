@@ -79,5 +79,11 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
       setting: 'foskym-wechat-official.enable_unbind',
       label: app.translator.trans('foskym-wechat-official.admin.settings.enable_unbind_label'),
       type: 'boolean',
+    })
+    .registerSetting({
+      setting: 'foskym-wechat-official.template_message_api_token',
+      label: app.translator.trans('foskym-wechat-official.admin.settings.template_message_api_token_label'),
+      help: location.origin + '/api/wechat-official/template-message',
+      type: 'text',
     });
 });

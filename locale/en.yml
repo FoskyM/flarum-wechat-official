@@ -18,6 +18,8 @@ foskym-wechat-official:
       token_label: Token
       aes_key_label: AES Key
       server_url_label: Server URL
+      template_message_api_token_label: Template Message API Token
+      template_message_api_token_description: 'The token for the template message API, which is used to send template messages'
 
     pages:
       index: Home

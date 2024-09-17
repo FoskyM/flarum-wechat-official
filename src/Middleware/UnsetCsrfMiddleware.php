@@ -33,6 +33,7 @@ class UnsetCsrfMiddleware implements MiddlewareInterface
     {
         $uri = [
             '/wechat-official/ping',
+            '/wechat-official/template-message',
         ];
         $path = $request->getUri()->getPath();
         if (in_array($path, $uri)) {

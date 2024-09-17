@@ -85,7 +85,9 @@ return [
         ->get('/wechat-official/qrcode/{id}', 'foskym-wechat-official.check', Controllers\WechatCheckController::class)
 
         ->get('/wechat-official/ping', 'foskym-wechat-official.ping.get', Controllers\WechatPingController::class)
-        ->post('/wechat-official/ping', 'foskym-wechat-official.ping.post', Controllers\WechatPingController::class),
+        ->post('/wechat-official/ping', 'foskym-wechat-official.ping.post', Controllers\WechatPingController::class)
+
+        ->post('/wechat-official/template-message', 'foskym-wechat-official.template-message', Controllers\ApiTemplateMessageController::class),
 
     (new Extend\Middleware(frontend: 'api'))
         ->insertBefore(CheckCsrfToken::class, Middleware\UnsetCsrfMiddleware::class)
