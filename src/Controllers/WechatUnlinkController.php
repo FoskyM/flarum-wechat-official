@@ -65,10 +65,10 @@ class WechatUnlinkController implements RequestHandlerInterface
 
         $wechat_link = WechatLink::where('user_id', $actor->id)->first();
         if ($wechat_link) {
+            $wechat_link->delete();
             $this->events->dispatch(
                 new WechatUnlinked($actor, $wechat_link)
             );
-            $wechat_link->delete();
         }
 
         return new JsonResponse([
