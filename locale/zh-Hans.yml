@@ -17,6 +17,19 @@ foskym-wechat-official:
       aes_key_label: AES Key
       server_url_label: 服务器地址
 
+    pages:
+      index: 首页
+      other: 其他
+
+    other:
+      delete_qrcode_cache: 删除二维码缓存
+      delete_qrcode_cache_confirm: 确定要删除二维码缓存吗？
+      delete_qrcode_cache_success: 二维码缓存删除成功
+
+      delete_wechat_link: 删除已绑定的微信账号
+      delete_wechat_link_confirm: 确定要删除已绑定的微信账号吗？
+      delete_wechat_link_success: 已绑定的微信账号删除成功
+
   forum:
     settings:
       push_notification_label: 微信

@@ -1,0 +1,55 @@
+.WechatOfficial {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+
+  .ExtensionPage-settings {
+    margin-top: 0;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .pull-right {
+    float: right;
+  }
+
+  .WechatOfficial-menu {
+    background: @control-bg;
+    margin-bottom: 15px;
+
+
+    .Button {
+      padding: 12px 13px;
+      border-radius: 0;
+
+      &.item-selected {
+        background: darken(@control-bg, 10%);
+      }
+    }
+  }
+
+  .WechatOfficial-container {
+    .AdminPage {
+      .container {
+        padding: 0 !important;
+      }
+    }
+  }
+
+  .WechatOfficialPage-container {
+    max-width: 100% !important;
+  }
+}
+
+
+
+
+@media (min-width: 992px) {
+  .WechatOfficial {
+    .WechatOfficialPage-container {
+      max-width: 600px;
+      margin: 0;
+    }
+  }
+}

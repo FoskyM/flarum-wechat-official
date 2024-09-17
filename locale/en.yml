@@ -19,6 +19,19 @@ foskym-wechat-official:
       aes_key_label: AES Key
       server_url_label: Server URL
 
+    pages:
+      index: Home
+      other: Other
+
+    other:
+      delete_qrcode_cache: Delete QR Code Cache
+      delete_qrcode_cache_confirm: Are you sure you want to delete the QR code cache?
+      delete_qrcode_cache_success: QR code cache deleted successfully
+
+      delete_wechat_link: Delete WeChat Link
+      delete_wechat_link_confirm: Are you sure you want to delete the WeChat link?
+      delete_wechat_link_success: WeChat link deleted successfully
+
   forum:
     settings:
       push_notification_label: Wechat

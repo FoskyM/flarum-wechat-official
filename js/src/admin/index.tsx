@@ -1,9 +1,11 @@
 import app from 'flarum/admin/app';
 import Switch from 'flarum/common/components/Switch';
+import SettingsPage from './components/SettingsPage';
 
 app.initializers.add('foskym/flarum-wechat-official', () => {
   app.extensionData
     .for('foskym-wechat-official')
+    .registerPage(SettingsPage)
     .registerSetting({
       setting: 'foskym-wechat-official.develop_mode',
       label: app.translator.trans('foskym-wechat-official.admin.settings.develop_mode_label'),
@@ -14,40 +16,27 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
       let is_develop_mode = this.setting('foskym-wechat-official.develop_mode')();
       if (is_develop_mode === '0') is_develop_mode = false;
       return (
-        <div className="Form-group">
-          <label>{app.translator.trans(`foskym-wechat-official.admin.settings.app_id_label`)}</label>
-          <input type="text" className="FormControl" bidi={this.setting(`foskym-wechat-official.app_id${is_develop_mode ? '_dev' : ''}`)} />
-        </div>
-      );
-    })
-    .registerSetting(function () {
-      let is_develop_mode = this.setting('foskym-wechat-official.develop_mode')();
-      if (is_develop_mode === '0') is_develop_mode = false;
-      return (
-        <div className="Form-group">
-          <label>{app.translator.trans(`foskym-wechat-official.admin.settings.app_secret_label`)}</label>
-          <input type="text" className="FormControl" bidi={this.setting(`foskym-wechat-official.app_secret${is_develop_mode ? '_dev' : ''}`)} />
-        </div>
-      );
-    })
-    .registerSetting(function () {
-      let is_develop_mode = this.setting('foskym-wechat-official.develop_mode')();
-      if (is_develop_mode === '0') is_develop_mode = false;
-      return (
-        <div className="Form-group">
-          <label>{app.translator.trans(`foskym-wechat-official.admin.settings.token_label`)}</label>
-          <input type="text" className="FormControl" bidi={this.setting(`foskym-wechat-official.token${is_develop_mode ? '_dev' : ''}`)} />
-        </div>
-      );
-    })
-    .registerSetting(function () {
-      let is_develop_mode = this.setting('foskym-wechat-official.develop_mode')();
-      if (is_develop_mode === '0') is_develop_mode = false;
-      return (
-        <div className="Form-group">
-          <label>{app.translator.trans(`foskym-wechat-official.admin.settings.aes_key_label`)}</label>
-          <input type="text" className="FormControl" bidi={this.setting(`foskym-wechat-official.aes_key${is_develop_mode ? '_dev' : ''}`)} />
-        </div>
+        <>
+          <div className="Form-group">
+            <label>{app.translator.trans(`foskym-wechat-official.admin.settings.app_id_label`)}</label>
+            <input type="text" className="FormControl" bidi={this.setting(`foskym-wechat-official.app_id${is_develop_mode ? '_dev' : ''}`)} />
+          </div>
+
+          <div className="Form-group">
+            <label>{app.translator.trans(`foskym-wechat-official.admin.settings.app_secret_label`)}</label>
+            <input type="text" className="FormControl" bidi={this.setting(`foskym-wechat-official.app_secret${is_develop_mode ? '_dev' : ''}`)} />
+          </div>
+
+          <div className="Form-group">
+            <label>{app.translator.trans(`foskym-wechat-official.admin.settings.token_label`)}</label>
+            <input type="text" className="FormControl" bidi={this.setting(`foskym-wechat-official.token${is_develop_mode ? '_dev' : ''}`)} />
+          </div>
+
+          <div className="Form-group">
+            <label>{app.translator.trans(`foskym-wechat-official.admin.settings.aes_key_label`)}</label>
+            <input type="text" className="FormControl" bidi={this.setting(`foskym-wechat-official.aes_key${is_develop_mode ? '_dev' : ''}`)} />
+          </div>
+        </>
       );
     })
     .registerSetting({

@@ -72,6 +72,9 @@ return [
         ->get('/wechat-official/callback', 'foskym-wechat-official.callback', Controllers\WechatLoginController::class),
     
     (new Extend\Routes('api'))
+        ->delete('/wechat-official/link', 'foskym-wechat-official.delete.link', Controllers\AdminDeleteWechatLinkController::class)
+        ->delete('/wechat-official/qrcode', 'foskym-wechat-official.delete.qrcode', Controllers\AdminDeleteQrcodeCacheController::class)
+
         ->post('/wechat-official/unlink', 'foskym-wechat-official.unlink', Controllers\WechatUnlinkController::class)
         ->get('/wechat-official/qrcode', 'foskym-wechat-official.qrcode', Controllers\WechatQrcodeController::class)
         ->get('/wechat-official/qrcode/{id}', 'foskym-wechat-official.check', Controllers\WechatCheckController::class)
