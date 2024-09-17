@@ -13,6 +13,9 @@ foskym-wechat-official:
       template_message_id_label: 模板消息 ID
       template_message_id_description: '模板格式'
       callback_url_description: '请将网站域名填入微信公众平台【网页授权】配置中'
+      token_label: Token
+      aes_key_label: AES Key
+      server_url_label: 服务器地址
 
   forum:
     settings:
@@ -26,6 +29,16 @@ foskym-wechat-official:
     notifications:
       wechat_linked: '您的微信账号已绑定到您的论坛账号。'
       wechat_unlinked: '您的微信账号已从您的论坛账号解绑。'
+
+    login-button: '微信登录'
+
+    scan:
+      bind:
+        title: 绑定微信账号
+        description: '扫描二维码绑定您的微信账号'
+      login:
+        title: 微信登录
+        description: '扫描二维码登录'
 
   email:
     wechat_linked:

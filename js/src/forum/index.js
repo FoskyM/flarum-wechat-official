@@ -10,8 +10,10 @@ import Page from 'flarum/common/components/Page';
 import icon from 'flarum/common/helpers/icon';
 import User from 'flarum/common/models/User';
 import Model from 'flarum/common/Model';
+import LogInButtons from 'flarum/forum/components/LogInButtons';
 import LogInModal from 'flarum/forum/components/LogInModal';
 import WechatLinkedNotification from './components/WechatLinkedNotification';
+import QrCodeModal from './components/QrCodeModal';
 
 function getOAuthURL() {
   const appid = app.forum.attribute('foskym-wechat-official.app_id');
@@ -41,7 +43,7 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
     items.add('wechatLinked', {
       name: 'wechatLinked',
       icon: 'fab fa-weixin',
-      label: app.translator.trans('foskym-wechat-official.forum.settings.notify_wechat_linked_label')
+      label: app.translator.trans('foskym-wechat-official.forum.settings.notify_wechat_linked_label'),
     });
   });
 
@@ -55,6 +57,15 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
       icon: 'fab fa-weixin',
       label: app.translator.trans('foskym-wechat-official.forum.settings.push_notification_label'),
     });
+  });
+
+  extend(LogInButtons.prototype, 'items', function (items) {
+    items.add(
+      'wechat-official-login',
+      <Button onclick={() => app.modal.show(QrCodeModal, { type: 'login' })} className="Button Button--block LogInButton--wechat-official">
+        {icon('fab fa-weixin')} {app.translator.trans('foskym-wechat-official.forum.login-button')}
+      </Button>
+    );
   });
 
   extend(SettingsPage.prototype, 'accountItems', function (items) {
@@ -85,12 +96,25 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
         >
           {app.translator.trans('foskym-wechat-official.forum.settings.wechat_unlink')}
         </Button>
-      ) : (
+      ) : isInWechat() ? (
         <LinkButton icon="fab fa-weixin" className="Button Button--Wechat" disabled={this.user.WechatAuth().isLinked} href={url} external={true}>
           {this.user.WechatAuth().isLinked
             ? app.translator.trans('foskym-wechat-official.forum.settings.wechat_linked')
             : app.translator.trans('foskym-wechat-official.forum.settings.bind_wechat')}
         </LinkButton>
+      ) : (
+        <Button
+          icon="fab fa-weixin"
+          className="Button Button--Wechat"
+          disabled={this.user.WechatAuth().isLinked}
+          onclick={() => {
+            app.modal.show(QrCodeModal, { type: 'bind' });
+          }}
+        >
+          {this.user.WechatAuth().isLinked
+            ? app.translator.trans('foskym-wechat-official.forum.settings.wechat_linked')
+            : app.translator.trans('foskym-wechat-official.forum.settings.bind_wechat')}
+        </Button>
       ),
       -100
     );

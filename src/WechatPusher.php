@@ -1,13 +1,14 @@
 <?php
 
 /*
- * This file is part of askvortsov/flarum-pwa
+ * This file is part of foskym/flarum-wechat-official.
  *
- *  Copyright (c) 2021 Alexander Skvortsov.
+ * Copyright (c) 2024 FoskyM.
  *
- *  For detailed copyright and license information, please view the
- *  LICENSE file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
  */
+
 
 namespace FoskyM\WechatOfficial;
 
@@ -35,18 +36,22 @@ class WechatPusher
 
     protected Cache $cache;
 
+    protected WechatApi $wechatApi;
+
     public function __construct(
         LoggerInterface $logger,
         SettingsRepositoryInterface $settings,
         UrlGenerator $url,
         NotificationBuilder $notifications,
-        Cache $cache
+        Cache $cache,
+        WechatApi $wechatApi
     ) {
         $this->logger = $logger;
         $this->settings = $settings;
         $this->url = $url;
         $this->notifications = $notifications;
         $this->cache = $cache;
+        $this->wechatApi = $wechatApi;
     }
 
     /**
@@ -55,16 +60,7 @@ class WechatPusher
      */
     public function notify(BlueprintInterface $blueprint, array $recipients = []): void
     {
-        $access_token = $this->cache->get('wechat_official.access_token');
-        if (is_null($access_token)) {
-            $appid = $this->settings->get('foskym-wechat-official.app_id');
-            $secret = $this->settings->get('foskym-wechat-official.app_secret');
-            $api = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' . $appid . '&secret=' . $secret;
-            $response = json_decode(file_get_contents($api));
-            $access_token = $response->access_token;
-
-            $this->cache->put('wechat_official.access_token', $access_token, $response->expires_in);
-        }
+        $app = $this->wechatApi->getApp();
 
         $template_id = $this->settings->get('foskym-wechat-official.template_message_id');
 
@@ -75,8 +71,8 @@ class WechatPusher
                     $wechat_link = WechatLink::where('user_id', $user->id)->firstOrFail();
                     $wechat_open_id = $wechat_link->wechat_open_id;
                     $message = $this->notifications->build($blueprint);
-                    $api = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token;
-                    $data = [
+
+                    $app->template_message->send([
                         'touser' => $wechat_open_id,
                         'template_id' => $template_id,
                         'url' => $message->url(),
@@ -90,21 +86,8 @@ class WechatPusher
                             'time01' => [
                                 'value' => Carbon::now()->toDateTimeString(),
                             ],
-                        ]
-                    ];
-                    // POST
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, $api);
-                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                        'Content-Type: application/json',
-                        'Content-Length: ' . strlen(json_encode($data))
+                        ],
                     ]);
-                    $result = curl_exec($ch);
-                    curl_close($ch);
-                    
                 } catch (Exception $e) {
                     continue;
                 }

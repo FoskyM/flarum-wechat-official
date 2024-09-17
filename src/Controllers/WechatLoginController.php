@@ -33,6 +33,7 @@ use Flarum\User\UserRepository;
 use Illuminate\Contracts\Bus\Dispatcher as BusDispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use FoskyM\WechatOfficial\Event\WechatLinked;
+use FoskyM\WechatOfficial\WechatApi;
 
 class WechatLoginController implements RequestHandlerInterface
 {
@@ -42,7 +43,8 @@ class WechatLoginController implements RequestHandlerInterface
     protected $settings;
     protected $authenticator;
     protected $rememberer;
-    public function __construct(UserRepository $users, BusDispatcher $bus, EventDispatcher $events, SettingsRepositoryInterface $settings, SessionAuthenticator $authenticator, Rememberer $rememberer)
+    protected $wechatApi;
+    public function __construct(UserRepository $users, BusDispatcher $bus, EventDispatcher $events, SettingsRepositoryInterface $settings, SessionAuthenticator $authenticator, Rememberer $rememberer, WechatApi $wechatApi)
     {
         $this->users = $users;
         $this->bus = $bus;
@@ -50,6 +52,7 @@ class WechatLoginController implements RequestHandlerInterface
         $this->settings = $settings;
         $this->authenticator = $authenticator;
         $this->rememberer = $rememberer;
+        $this->wechatApi = $wechatApi;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

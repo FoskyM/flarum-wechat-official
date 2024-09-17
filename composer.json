@@ -9,7 +9,8 @@
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
-        "flarum/core": "^1.8.0"
+        "flarum/core": "^1.8.0",
+        "w7corp/easywechat": "~5.0"
     },
     "authors": [
         {
@@ -76,5 +77,10 @@
     },
     "require-dev": {
         "flarum/testing": "^1.0.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "easywechat-composer/easywechat-composer": true
+        }
     }
 }
