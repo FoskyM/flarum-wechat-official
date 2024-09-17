@@ -1,1 +1,1 @@
-{!! $translator->trans('foskym-wechat-official.email.wechat_linked.body') !!}
+{!! $translator->trans('foskym-wechat-official.email.wechat_unlinked.body') !!}
