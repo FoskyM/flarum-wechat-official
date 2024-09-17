@@ -25,6 +25,8 @@ class WechatLink extends AbstractModel
         'wechat_original_data' => 'array',
     ];
 
+    public $timestamps = true;
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
