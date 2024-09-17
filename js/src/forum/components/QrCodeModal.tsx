@@ -20,7 +20,7 @@ export default class QrCodeModal extends Modal {
     app
       .request({
         method: 'GET',
-        url: app.forum.attribute('apiUrl') + '/wechat-official/qrcode',
+        url: app.forum.attribute('apiUrl') + '/wechat-official/qrcode?type=' + this.qrCodeType,
       })
       .then((response: any) => {
         this.qrCodeUrl = response.url;
