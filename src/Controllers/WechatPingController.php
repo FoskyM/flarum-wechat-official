@@ -85,8 +85,9 @@ class WechatPingController implements RequestHandlerInterface
                             $qrcode->save();
 
                             $msg = '登录成功，正在跳转...';
+                        } else {
+                            $msg = '登录失败，请先绑定微信';
                         }
-                        $msg = '登录失败，请先绑定微信';
                     } else if ($scene === 'bind') { // bind
                         $user_id = $qrcode->user_id;
                         $user = User::find($user_id);
