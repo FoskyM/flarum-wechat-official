@@ -72,5 +72,8 @@ return [
     (new Extend\Routes('api'))
         ->post('/wechat-official/unlink', 'foskym-wechat-official.unlink', Controllers\WechatUnlinkController::class)
         ->get('/wechat-official/qrcode', 'foskym-wechat-official.qrcode', Controllers\WechatQrcodeController::class)
-        ->get('/wechat-official/qrcode/{id}', 'foskym-wechat-official.check', Controllers\WechatCheckController::class),
+        ->get('/wechat-official/qrcode/{id}', 'foskym-wechat-official.check', Controllers\WechatCheckController::class)
+
+        ->get('/wechat-official/ping', 'foskym-wechat-official.ping.get', Controllers\WechatPingController::class)
+        ->post('/wechat-official/ping', 'foskym-wechat-official.ping.post', Controllers\WechatPingController::class),
 ];
