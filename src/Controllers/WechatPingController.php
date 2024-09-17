@@ -60,8 +60,6 @@ class WechatPingController implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $actor = RequestUtil::getActor($request);
-        $actor->assertRegistered();
-
         $app = $this->wechatApi->getApp();
 
         $app->server->push(function ($message) use ($app) {

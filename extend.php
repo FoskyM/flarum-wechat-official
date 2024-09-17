@@ -12,13 +12,15 @@
 namespace FoskyM\WechatOfficial;
 
 use Flarum\Extend;
-use FoskyM\WechatOfficial\Notification\WechatLinkedBlueprint;
+use Flarum\Http\Middleware\CheckCsrfToken;
 use Flarum\User\User;
 use Flarum\Api\Serializer\UserSerializer;
+
 use FoskyM\WechatOfficial\Models\WechatLink;
 use FoskyM\WechatOfficial\Serializers\WechatLinkSerializer;
 use FoskyM\WechatOfficial\Event\WechatLinked;
 use FoskyM\WechatOfficial\Event\WechatUnlinked;
+use FoskyM\WechatOfficial\Notification\WechatLinkedBlueprint;
 
 return [
     (new Extend\Frontend('forum'))
@@ -76,4 +78,7 @@ return [
 
         ->get('/wechat-official/ping', 'foskym-wechat-official.ping.get', Controllers\WechatPingController::class)
         ->post('/wechat-official/ping', 'foskym-wechat-official.ping.post', Controllers\WechatPingController::class),
+
+    (new Extend\Middleware(frontend: 'api'))
+        ->insertBefore(CheckCsrfToken::class, Middleware\UnsetCsrfMiddleware::class)
 ];
