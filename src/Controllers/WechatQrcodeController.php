@@ -72,6 +72,7 @@ class WechatQrcodeController implements RequestHandlerInterface
         $qrcode = WechatQrcode::where('user_id', $actor->id)
             ->where('scene', $type)
             ->where('scaned', false)
+            ->where('ticket', '!=', '')
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -90,6 +91,10 @@ class WechatQrcodeController implements RequestHandlerInterface
         $qrcode->save();
 
         $result = $app->qrcode->temporary($qrcode->id, 6 * 24 * 3600);
+        if (isset($result['errcode']) || !isset($result['ticket'])) {
+            $qrcode->delete();
+            return new JsonResponse($result, 500);
+        }
         $qrcode->ticket = $result['ticket'];
         $qrcode->save();
         
