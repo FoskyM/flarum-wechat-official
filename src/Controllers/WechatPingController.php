@@ -77,15 +77,16 @@ class WechatPingController implements RequestHandlerInterface
                     }
 
                     $scene = $qrcode->scene;
+                    $msg = null;
                     if ($scene === 'login') { // login
                         $wechatLink = WechatLink::where('wechat_open_id', $openid)->first();
                         if ($wechatLink) {
                             $qrcode->user_id = $wechatLink->user_id;
                             $qrcode->save();
 
-                            return '登录成功，正在跳转...';
+                            $msg = '登录成功，正在跳转...';
                         }
-                        return '登录失败，请先绑定微信';
+                        $msg = '登录失败，请先绑定微信';
                     } else if ($scene === 'bind') { // bind
                         $user_id = $qrcode->user_id;
                         $user = User::find($user_id);
@@ -94,7 +95,7 @@ class WechatPingController implements RequestHandlerInterface
                             if ($wechatLink) {
                                 // $wechatLink->user_id = $user_id;
                                 // $wechatLink->save();
-                                return '绑定失败，该微信已绑定其他账号';
+                                $msg = '绑定失败，该微信已绑定其他账号';
                             } else {
                                 $user_info = $app->user->get($openid);
                                 $wechatLink = new WechatLink();
@@ -102,13 +103,14 @@ class WechatPingController implements RequestHandlerInterface
                                 $wechatLink->wechat_original_data = json_encode($user_info);
                                 $wechatLink->user_id = $user_id;
                                 $wechatLink->save();
-                                return '绑定成功';
+                                $msg = '绑定成功';
                             }
                         }
                     }
 
                     $qrcode->scaned = true;
                     $qrcode->save();
+                    return $msg;
                 } elseif ($event == 'unsubscribe') {
                     $wechatLink = WechatLink::where('wechat_open_id', $openid)->first();
                     if ($wechatLink) {
