@@ -62,6 +62,11 @@ return [
                 'isLinked' => $linked,
             ];
 
+            if ($serializer->getActor()->can('administrate')) {
+                $attributes['WechatAuth']['wechat_open_id'] = $linked ? $link->wechat_open_id : '未绑定';
+                $attributes['WechatAuth']['wechat_original_data'] = $linked ? $link->wechat_original_data : null;
+            }
+
             return $attributes;
         }),
 
