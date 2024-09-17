@@ -8,11 +8,8 @@ import LinkButton from 'flarum/common/components/LinkButton';
 import Link from 'flarum/common/components/Link';
 import Page from 'flarum/common/components/Page';
 import icon from 'flarum/common/helpers/icon';
-import User from 'flarum/common/models/User';
-import Model from 'flarum/common/Model';
 import LogInButtons from 'flarum/forum/components/LogInButtons';
 import LogInModal from 'flarum/forum/components/LogInModal';
-import EditUserModal from 'flarum/forum/components/EditUserModal';
 import WechatLinkedNotification from './components/WechatLinkedNotification';
 import QrCodeModal from './components/QrCodeModal';
 
@@ -37,7 +34,6 @@ function isCallback() {
 }
 
 app.initializers.add('foskym/flarum-wechat-official', () => {
-  User.prototype.WechatAuth = Model.attribute('WechatAuth');
   app.notificationComponents.wechatLinked = WechatLinkedNotification;
 
   extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
@@ -67,25 +63,6 @@ app.initializers.add('foskym/flarum-wechat-official', () => {
         {icon('fab fa-weixin')} {app.translator.trans('foskym-wechat-official.forum.login-button')}
       </Button>
     );
-  });
-
-  extend(EditUserModal.prototype, 'fields', function (items) {
-    const user = this.attrs.user;
-
-    if (this.attrs.user.canEditCredentials() && this.attrs.user.WechatAuth().wechat_open_id) {
-      items.add(
-        'wechat-official-openid',
-        <div className="Form-group">
-          <label>公众号 Openid</label>
-          <input
-            className="FormControl"
-            placeholder={'公众号 Openid'}
-            readonly
-            value={this.attrs.user.WechatAuth().wechat_open_id}
-          />
-        </div>
-      );
-    }
   });
 
   extend(SettingsPage.prototype, 'accountItems', function (items) {
