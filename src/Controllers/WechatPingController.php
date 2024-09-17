@@ -67,9 +67,9 @@ class WechatPingController implements RequestHandlerInterface
             $msgType = $message['MsgType'];
             if ($msgType == 'event') {
                 $event = strtolower($message['Event']);
-                $eventKey = $message['EventKey'];
 
                 if ($event == 'subscribe' || $event == 'scan') {
+                    $eventKey = $message['EventKey'];
                     $id = str_replace('qrscene_', '', (string) $eventKey);
                     $qrcode = WechatQrcode::where('id', $id)->first();
                     if (!$qrcode) {
@@ -116,13 +116,6 @@ class WechatPingController implements RequestHandlerInterface
 
         $response = $app->server->serve();
 
-        $response->send();
-
-        $content = $response->getContent();
-
-        return new Response($content);
-        // return new JsonResponse([
-        //     'url' => $url,
-        // ]);
+        $response->send();exit;
     }
 }
